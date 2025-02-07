@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classifier</title>
+    <style>
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            display: block;
+            margin: auto;
+        }
+
+        body {
+            background-image: url('../static/img/background.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .title {
+            color: rgb(46, 3, 114);
+        }
+
+        .card {
+            border: 2px solid #0f0897 !important;
+            box-shadow: 1px 2px 10px #1105ef;
+        }
+
+        .result{
+            text-transform: uppercase;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="mt-5 z-3">
+        <center>
+            <h1 class="title">Ứng dụng Chẩn đoán bệnh Viêm phổi</h1>
+            <img src="../static/img/cardimage.jpg" class="img-thumbnail my-3 rounded-circle" alt="..." style="width: 300px;">
+            <h6 class="title">Sự hỗ trợ đắc lực công tác chẩn đoán hình ảnh y khoa</h6>
+
+            <div class="mt-5 card" style="width: 500px;">
+                <div class="card-body">
+                    <h6 class="title">Tải ảnh chụp X-quang tại đây:</h6>
+                    <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data"> <!-- Thêm ID cho form -->
+                        <input type="file" name="file" accept=".jpg, .jpeg, .png">
+                        <input class="btn btn-primary" type="submit" value="Dự đoán">
+                    </form>
+
+                    {% if prediction %}
+                    <h2 class="title">Kết quả:</h2>
+
+                    <b>
+                        <p class="text-primary result">{{ prediction.class }}</p>
+                    </b>
+                    <!-- <p>Confidence: {{ prediction.confidence }}</p> -->
+                    <img src="{{ url_for('static', filename='temp/temp_img.jpg') }}" alt="Uploaded Image">
+                    {% endif %}
+                </div>
+            </div>
+        </center>
+    </div>
+    <footer class="mt-5">
+        <center>
+           
+        </center>
+    </footer>
+
+    <script>
+        // Bắt sự kiện khi form được gửi đi
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            // Kiểm tra xem có tệp nào được chọn không
+            var fileInput = document.querySelector('input[type="file"]');
+            if (!fileInput.value) {
+                // Nếu không có tệp nào được chọn, hiển thị một alert
+                alert("Vui lòng chọn một tệp trước khi gửi.");
+                // Ngăn chặn việc gửi form đi
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+
+</html>
